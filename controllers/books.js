@@ -1,8 +1,21 @@
 const Books = require("../models/Books");
 
 const getAllBooks = async (req, res) => {
-  const books = await Books.find({});
-  res.status(200).json({ books });
+  const { title, field } = req.query;
+  const queryObject = {};
+
+  if (title) {
+    queryObject.title = { $regex: title, $options: "i" };
+  }
+
+  let result = Books.find(queryObject);
+  if (field) {
+    const fieldList = field.split(",").join("");
+    result = result.select(fieldList);
+  }
+
+  const books = await result;
+  res.status(200).json({ books, nbHits: books.length });
 };
 
 const getSingleBook = async (req, res) => {

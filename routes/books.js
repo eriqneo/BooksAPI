@@ -7,7 +7,6 @@ const {
   deleteBook,
   createBook,
   updateBook,
-  getRandomBook,
 } = require("../controllers/books");
 
 router.route("/").get(getAllBooks).post(createBook);
